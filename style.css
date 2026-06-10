@@ -1,3 +1,8 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,200,0,0");
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css");
+
 /* http://meyerweb.com 
    v2.0 | 20110126
    License: none (public domain)
@@ -29,7 +34,7 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
-    font-family: sans-serif;
+    font-family: noto sans tc, "Noto Sans", sans-serif;
 	line-height: 1.5;
 }
 ol, ul {
@@ -54,16 +59,43 @@ table {
 }
 .container{
     margin: 0;
+    @media (max-width: 768px){
+        max-width: 100%;
 }
+
+/*斷點*/
+@mixin lg{
+    @media (max-width: 1024px){
+        @content;
+    }
+}
+@mixin md{
+    @media (max-width: 768px){
+        @content;
+    }
+}
+@mixin sm{
+    @media (max-width: 576px){
+        @content;
+    }
+}
+
 .header{
     padding: 0 10%;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background-color: #FDF7F1;
+    position: relative; /* 讓絕對定位的下拉選單可以基準於 header 下方 */
+    z-index: 99;        /* 確保 header 與下拉選單永遠在 banner 之上 */
 }
 .header h1{
     font-size: 64px;
     color: #404040;
+}
+.nav-menu {
+    display: flex;
+    gap: 20px;
 }
 .banner{
     margin-bottom: 80px;
@@ -73,10 +105,16 @@ table {
     justify-content: center;
     align-items: center;
     background-image: url(https://raw.githubusercontent.com/hexschool/2022-web-layout-training/015dd339d657d3c861618d8d633f920c6b6da4f0/2026-web-camp/blog_banner.png);
+
+    @media (max-width: 576px){
+        height: 380px;
+        background-image: url(https://github.com/hexschool/2022-web-layout-training/blob/main/2026-web-camp/mobile/blog_banner.png?raw=true);
+        margin-bottom: 40px;
+    }
 }
 .banner::after{
     content: "BLOG";
-    font-size: 12vw;
+    font-size: 300px;
     font-weight: bold;
     letter-spacing: 0.1em;
     color: rgba(255, 255, 255, 0.2);
@@ -85,16 +123,76 @@ table {
     left: 50%;
     position: absolute;
     transform: translate(-50%, -50%);
+    @media (max-width:768px){
+        font-size: 200px;
+    }
+    @media (max-width: 576px){
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 130px;
+    }
 }
 .banner.blog{
     position: relative;
     z-index: 2;
 }
+/* 預設隱藏漢堡按鈕 */
+.hamburger-btn {
+    display: none;
+    flex-direction: column;
+    gap: 5px; /* 三條線的間距 */
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+/* 繪製漢堡的三條線 */
+.hamburger-btn span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #333333;
+    transition: all 0.3s ease-in-out;
+}
+/* --- 手機版樣式 (以 768px 為斷點) --- */
+@media (max-width: 768px) {
+    /* 1. 顯示漢堡按鈕 */
+    .hamburger-btn {
+        display: flex; 
+    }
+
+    /* 2. 將原本橫向的選單改成直向，並預設隱藏 */
+    .nav-menu {
+        display: none; /* 預設隱藏 */
+        flex-direction: column;
+        position: absolute;
+        top: 100%; /* 貼齊 header 的最下方 */
+        left: 0;
+        width: 100%;
+      background-color: #FDF7F1;
+        padding: 20px 0;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-menu a {
+        padding: 15px 0;
+        border-bottom: 1px solid #f1f1f1;
+    }
+
+    /* 3. 當選單被加上 'active' 類別時，顯示出來 */
+    .nav-menu.active {
+        display: flex; 
+    }
+}
+    
 .nav-menu a{
     text-decoration: none;
     color: #404040;
     font-size: 16px;
     margin: 4px 12px;
+    padding-bottom: 4px;
 }
 .nav-menu a:hover{
     border-bottom: solid  2px rgb(59, 59, 59);
@@ -114,10 +212,14 @@ table {
 }
 .content{
     padding: 0 16px;
-    width: 1328px;
+    max-width: 1328px;
     display: flex;
     margin: 0 auto;
     gap: 24px;
+    @media (max-width: 768px){
+        flex-direction: column;
+        padding: 0 12px;
+    }
 }
 .menu{
     padding-right: 16px;
@@ -132,18 +234,44 @@ table {
 .bar{
     font-size: 18px;
     font-weight: bold;
+    @media (max-width: 768px){
+        display: flex;
+        justify-content: space-between;
+    }
 }
+
 .menu-item{
     text-align: center;
     color: #404040;
 }
+@media (max-width: 768px) {
+  .post {
+    align-items: center;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none; 
+  padding: 0px;
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+  }
+}
+
 .m-link{
     display: block;
     width: 240px;
     padding: 12px 0;
     color: inherit;
     text-decoration: none;
-}
+    @media (max-width: 1024px) {
+        width: 120px;
+    }
+    @media (max-width: 768px) {
+        width: 100%;
+}}
 .menu-item.active,
 .menu-item:hover{
     background-color: #24140b;
@@ -154,6 +282,11 @@ table {
     text-decoration: none;
     gap: 24px;
     margin-bottom: 15px;
+    @media (max-width: 1070px) {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
 }
 .card-word{
     flex: 1;
@@ -169,6 +302,8 @@ table {
 }
 .d-f{
     display: flex;
+    max-width: 1328px;
+    
 }
 /*icon小元件載入*/
 .material-symbols-outlined {
@@ -199,3 +334,395 @@ table {
   .ml-a{
     margin-left: auto;
   }
+  /* 分頁 */
+  .pagination{
+    display: flex;
+    justify-content: right;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .pagination a{
+    display: block;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    color: #404040;
+    text-decoration: none;
+    border-radius: 50%;
+    border: solid 1px #404040;
+  }
+    .pagination a:hover{
+        background-color: #404040;
+        color: #FFF;
+    }
+    .bi-chevron-left,
+    .bi-chevron-right{
+          flex: 5;
+  height: 100%;
+  overflow: hidden;
+  @media (max-width: 576px) {
+    padding: 0;
+    flex: 1;
+    }}
+    .sub-img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .bi-chevron-left::before{
+        content: "\f284";
+    }
+    .bi-chevron-right::before{
+        content: "\f285";
+    }
+    /* ---footer--- */
+.footer{
+    margin-top: 80px;
+}
+/* ---訂閱電子報--- */
+.subscription{
+    background:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://github.com/hexschool/2022-web-layout-training/blob/main/2026-web-camp/subscription_bg.png?raw=true)center/cover no-repeat;
+    height: 440px;
+    width: 100%;
+    display: flex; 
+    justify-content: center;
+    align-items: stretch;
+    @media (max-width: 768px){
+        height: auto;
+    }
+    @media (max-width: 576px){
+        height: 629px;
+    }
+}
+.subscription .container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    @media (max-width: 768px){
+        flex-direction: column;
+        padding: 0 12px;
+        margin-bottom: 24px;
+    }
+}
+.subscription-left{
+    flex: 5;
+    height: 100%;
+    overflow: hidden;
+    @media (max-width: 768px){
+        padding: 0;
+        flex: 1;
+    }
+}
+.sub-img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.sub-form{
+    display: flex;
+    color: #FFF;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    @media (max-width: 768px){
+        padding: 0;
+        flex: 1;
+        text-align: center;
+    }
+}
+.sub-title{
+    font-size: 14px;
+    font-weight: bold;
+    color: #FFF;
+}
+.sub-title h2{
+    font-size: 80px;
+    @media (max-width: 768px){
+        font-size: 60px;
+    }
+    @media (max-width: 576px){
+        font-size: 40px;
+    }
+}
+.sub-desc{
+    font-size: 14px;
+    line-height: 1.5;
+    color: #FFF;
+}
+.sub-group{
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    border: solid 1px #FFF;
+    border-radius: 50px;
+    padding: 8px 8px 8px 32px;
+    bakground: transparent;
+    width: 100%;
+    @media (max-width: 768px){
+        padding: 8px 8px 8px 20px;
+    }
+}
+.sub-input{
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #FFF;
+    font-size: 14px;
+    width: 100%;
+    @media (max-width: 576px){
+        font-size: 14px;
+        overflow-wrap:anywhere;
+    }
+}
+.sub-input::placeholder{
+    color: #FFF;
+    opacity: 0.8;
+}
+
+.sub-btn{
+    background-color: #FFF;
+    color: #404040;
+    border: none;
+    border-radius: 50px;
+    padding: 8px 24px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.sub-btn:hover{
+    background-color: #404040;
+    color: #FFF;
+}
+
+/* ---聯絡我們--- */
+.contact-bg{
+    background-color: #24140B;
+    padding: 40px 0;
+}
+.contact{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    @media (max-width: 768px){
+        flex-direction: column;
+        padding: 0 12px;
+    }
+}
+
+.contact-title{
+    font-size: 14px;
+    font-weight: bold;
+    color: #FFF;
+}
+.contact-title h2{
+    font-size: 80px;
+    @media (max-width: 768px){
+        font-size: 60px;
+    }
+    @media (max-width: 576px){
+        font-size: 40px;
+    }
+}
+.contact-desc{
+    font-size: 14px;
+    line-height: 1.5;
+    color: #FFF;
+    font-weight: 500;
+}
+
+.contact-info{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.contact-social{
+    font-family: "noto sans", sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: #FFF;
+}
+.contact-social ul{
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.contact-social a{
+    color: inherit;
+    text-decoration: none;
+}
+.contact-social ul li{
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #FFF;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+    &:hover {
+      color: #F5B87B;
+      border: 1px solid #F5B87B;
+      cursor: pointer;
+    }
+}
+.bi{
+    font-size: 20px;
+}
+.contact-email{
+    display: flex;
+    align-items: center;
+    max-width: 100%;
+    min-width: 0;
+    flex-wrap: wrap;
+    word-break:break-word;
+    .iocon{
+        font-size: 18px;
+        margin-right: 8px;
+    }
+    &:hover{
+        color: #F5B87B;
+        cursor: pointer;
+    }
+}
+
+.contact-form{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    max-width: 400px;
+    @media (max-width: 576px){
+        max-width: 100%;
+        padding: 0;
+    }
+}
+.form-row{
+    display: flex;
+    gap: 24px;
+    @media (max-width: 576px){
+        padding: 0;
+        flex-direction: column;
+    }
+}
+.form-input{
+    width: 100%;
+    color: #FFF;
+    background: transparent;
+    border: solid 1px #FFF;
+    border-radius: 40px;
+    outline: none;
+    padding: 12px 24px;
+    @media (max-width: 576px){
+        padding: 12px 16px;
+    }
+}
+.form-input::placeholder{
+    color: #FFF;
+    opacity: 0.8;
+}
+.submit-btn{
+    background-color: #FFF;
+    color: #404040;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+}
+.submit-btn:hover{
+    background-color: #404040;
+    color: #FFF;
+}
+
+@media (max-width: 768px) {
+  .contact {
+    flex-direction: column;
+    padding: 40px 0;
+  }
+
+  .contact-info {
+    display: contents;
+    padding-bottom: 24px;
+  }
+
+  .contact-title {
+    order: 1;
+    margin-bottom: 12px;
+  }
+
+  .contact-desc {
+    font-size: 14px;
+    order: 2;
+  }
+
+  .contact-form {
+    order: 3;
+    width: 100%;
+    padding: 0;
+    margin-top: 24px;
+    gap: 12px;
+    border-radius: 32px;
+  }
+
+  .contact-social {
+    order: 4;
+    margin-top: 24px;
+    padding: 0;
+    width: 100%;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 375px) {
+  .sub-title h2 {
+    font-size: 32px;
+    line-height: 1.15;
+    max-width: 100%;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .sub-title,
+  .sub-desc,
+  .sub-group {
+    width: 100%;
+    @media (max-width: 331px) {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+  }
+  .contact-title h2 {
+    font-size: 32px;
+    line-height: 1.15;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 768px) {
+  .subscription-left,
+  .sub-img,
+  .sub-img img {
+    width: 100%;
+  }
+
+  .subscription-left {
+    width: calc(100% + 24px);
+    margin-left: -12px;
+    margin-right: -12px;
+  }
+
+  .sub-img img {
+    display: block;
+    height: auto;
+  }
+}
